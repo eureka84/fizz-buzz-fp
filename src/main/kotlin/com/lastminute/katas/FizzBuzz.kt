@@ -1,21 +1,30 @@
 package com.lastminute.katas
 
+import arrow.core.Option
+import arrow.core.getOrElse
+
+typealias Rule = (Int) -> Option<String>
+
+fun createRule(divisor: Int, word: String): Rule = { n: Int ->
+    if (n % divisor == 0)
+        Option.just(word)
+    else
+        Option.empty()
+}
+
+val fizz = createRule(3, "Fizz")
+val buzz = createRule(5, "Buzz")
+
 fun fizzBuzz(number: Int): String {
 
-    var res = ""
+    val rules = listOf(fizz, buzz)
 
-    if (number % 3 == 0) {
-        res += "Fizz"
+    val monoid: Monoid<Option<String>> = monoidOption(semigroupOption(semigroupString))
+
+    val rulesApplied: Option<String> = rules.fold(monoid.empty()) { acc: Option<String>, curr: Rule ->
+        monoid.combine(acc, curr(number))
     }
 
-    if (number % 5 == 0) {
-        res += "Buzz"
-    }
-
-    return if (res == "") {
-        number.toString()
-    } else {
-        res
-    }
-
+    return rulesApplied.getOrElse { number.toString() }
 }
+

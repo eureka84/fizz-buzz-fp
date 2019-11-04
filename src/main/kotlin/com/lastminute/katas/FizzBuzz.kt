@@ -1,6 +1,7 @@
 package com.lastminute.katas
 
 import arrow.core.Option
+import arrow.core.extensions.list.foldable.foldMap
 import arrow.core.extensions.option.monoid.monoid
 import arrow.core.extensions.semigroup
 import arrow.core.getOrElse
@@ -22,10 +23,7 @@ val rules = listOf(fizz, buzz)
 
 fun createFizzBuzz(rules: List<Rule>): (Int) -> String = { n: Int ->
     val monoid: Monoid<Option<String>> = Option.monoid(String.semigroup())
-    monoid.run {
-        val rulesApplied = rules.fold(monoid.empty(), { acc, curr ->acc.combine(curr(n)) })
-        rulesApplied.getOrElse { n.toString() }
-    }
+    rules.foldMap(monoid) { r: Rule -> r(n) }.getOrElse { n.toString() }
 }
 
 val fizzBuzz: (Int) -> String = createFizzBuzz(rules)

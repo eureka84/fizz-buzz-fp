@@ -34,3 +34,6 @@ fun <A> monoidOption(semigroupOption: Semigroup<Option<A>>): Monoid<Option<A>> =
 interface Monoid<A> : Semigroup<A> {
     fun empty(): A
 }
+
+// This can be abstracted for all structure that supports fold
+fun <A, B> List<A>.foldMap(m: Monoid<B>, f: (A) -> B): B = this.fold(m.empty()) { acc, curr -> m.combine(acc, f(curr)) }

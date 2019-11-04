@@ -21,9 +21,7 @@ fun fizzBuzz(number: Int): String {
 
     val monoid: Monoid<Option<String>> = monoidOption(semigroupOption(semigroupString))
 
-    val rulesApplied: Option<String> = rules.fold(monoid.empty()) { acc: Option<String>, curr: Rule ->
-        monoid.combine(acc, curr(number))
-    }
+    val rulesApplied: Option<String> = rules.foldMap(monoid) { rule -> rule(number) }
 
     return rulesApplied.getOrElse { number.toString() }
 }

@@ -1,13 +1,8 @@
 package com.lastminute.katas
 
 import arrow.core.Option
-import arrow.core.extensions.list.foldable.foldMap
-import arrow.core.extensions.option.monoid.monoid
-import arrow.core.extensions.semigroup
+import arrow.core.extensions.list.foldable.combineAll
 import arrow.core.getOrElse
-import arrow.typeclasses.Monoid
-
-typealias Rule = (Int) -> Option<String>
 
 fun word(divisor: Int, word: String): Rule = { n: Int ->
     if (n % divisor == 0)
@@ -19,11 +14,10 @@ fun word(divisor: Int, word: String): Rule = { n: Int ->
 val fizz: Rule = word(3, "Fizz")
 val buzz: Rule = word(5, "Buzz")
 
-val rules = listOf(fizz, buzz)
+val rules: List<Rule> = listOf(fizz, buzz)
 
 fun createFizzBuzz(rules: List<Rule>): (Int) -> String = { n: Int ->
-    val monoid: Monoid<Option<String>> = Option.monoid(String.semigroup())
-    rules.foldMap(monoid) { r: Rule -> r(n) }.getOrElse { n.toString() }
+    rules.combineAll(ruleMonoid)(n).getOrElse { "$n" }
 }
 
 val fizzBuzz: (Int) -> String = createFizzBuzz(rules)

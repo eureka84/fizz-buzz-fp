@@ -18,9 +18,7 @@ val buzz = createRule(5, "Buzz")
 fun createFizzBuzz(rules: List<Rule>): (Int) -> String = { number: Int ->
     val monoid: Monoid<Option<String>> = monoidOption(semigroupOption(semigroupString))
 
-    val rulesApplied: Option<String> = rules.foldMap(monoid) { rule -> rule(number) }
-
-    rulesApplied.getOrElse { number.toString() }
+    rules.foldMap(monoid) { rule -> rule(number) }.getOrElse { number.toString() }
 }
 
 val fizzBuzz = createFizzBuzz(listOf(fizz, buzz))

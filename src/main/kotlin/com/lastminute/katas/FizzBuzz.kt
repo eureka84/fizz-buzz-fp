@@ -1,16 +1,23 @@
 package com.lastminute.katas
 
-fun fizzBuzz(number: Int): String {
-    val rules = listOf(fizz, buzz)
+val buzz: Rule = createRule(5, "Buzz")
+val fizz: Rule = createRule(3, "Fizz")
 
-    val combinedRule = rules.fold(empty) { acc, rule -> combine(acc, rule) }
+val fizzBuzz = createFizzBuzz(listOf(fizz, buzz))
 
-    val appliedCombinedRules = combinedRule(number)
-
-    return if(appliedCombinedRules != "") appliedCombinedRules else "$number"
+private fun createFizzBuzz(numberRules: List<Rule>): Rule = { number: Int ->
+    combineAllRules(numberRules)(number).or("$number")
 }
 
 typealias Rule = (Int) -> String
+
+private fun combineAllRules(rules: List<Rule>): Rule {
+    val empty: Rule = { _: Int -> "" }
+    return rules.fold(empty) { acc, rule -> combine(acc, rule) }
+}
+
+private fun String.or(default: String): String =
+    if (this.isNotEmpty()) this else default
 
 private fun createRule(divisor: Int, word: String): Rule = { n: Int ->
     if (n % divisor == 0)
@@ -18,10 +25,6 @@ private fun createRule(divisor: Int, word: String): Rule = { n: Int ->
     else
         ""
 }
-
-val buzz: Rule = createRule(5, "Buzz")
-val fizz: Rule = createRule(3, "Fizz")
-val empty: Rule = { _: Int -> "" }
 
 private fun combine(aRule: Rule, anotherRule: Rule): Rule = { n: Int ->
     aRule(n) + anotherRule(n)

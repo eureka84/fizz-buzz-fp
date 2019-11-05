@@ -1,6 +1,7 @@
 package com.lastminute.katas
 
 import arrow.core.Option
+import arrow.core.extensions.list.foldable.combineAll
 import arrow.core.extensions.option.monoid.monoid
 import arrow.core.extensions.semigroup
 import arrow.typeclasses.Monoid
@@ -21,3 +22,5 @@ val ruleMonoid: Monoid<Rule> = object: Monoid<Rule> {
     }
 
 }
+
+fun List<Rule>.combineAll(): Rule = this.combineAll(ruleMonoid)

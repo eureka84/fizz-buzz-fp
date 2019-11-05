@@ -15,14 +15,12 @@ fun createRule(divisor: Int, word: String): Rule = { n: Int ->
 val fizz = createRule(3, "Fizz")
 val buzz = createRule(5, "Buzz")
 
-fun fizzBuzz(number: Int): String {
-
-    val rules = listOf(fizz, buzz)
-
+fun createFizzBuzz(rules: List<Rule>): (Int) -> String = { number: Int ->
     val monoid: Monoid<Option<String>> = monoidOption(semigroupOption(semigroupString))
 
     val rulesApplied: Option<String> = rules.foldMap(monoid) { rule -> rule(number) }
 
-    return rulesApplied.getOrElse { number.toString() }
+    rulesApplied.getOrElse { number.toString() }
 }
 
+val fizzBuzz = createFizzBuzz(listOf(fizz, buzz))

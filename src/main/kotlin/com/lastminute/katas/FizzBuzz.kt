@@ -16,7 +16,7 @@ val buzz: Rule = word(5, "Buzz")
 val rules: List<Rule> = listOf(fizz, buzz)
 
 fun createFizzBuzz(rules: List<Rule>): (Int) -> String = { n: Int ->
-    rules.combineAll()(n).getOrElse { "$n" }
+    rules.combined()(n).getOrElse { "$n" }
 }
 
 val fizzBuzz: (Int) -> String = createFizzBuzz(rules)

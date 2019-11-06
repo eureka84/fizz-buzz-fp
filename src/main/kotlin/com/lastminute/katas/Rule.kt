@@ -14,13 +14,13 @@ val ruleMonoid: Monoid<Rule> = object: Monoid<Rule> {
 
     override fun empty(): Rule  = { _ -> Option.empty()}
 
-    override fun (Rule).combine(b: Rule): Rule = { number: Int ->
-        val self = this
+    override fun (Rule).combine(otherRule: Rule): Rule = { number: Int ->
+        val thisRule = this
         monoid.run {
-            self(number).combine(b(number))
+            thisRule(number).combine(otherRule(number))
         }
     }
 
 }
 
-fun List<Rule>.combineAll(): Rule = this.combineAll(ruleMonoid)
+fun List<Rule>.combined(): Rule = this.combineAll(ruleMonoid)

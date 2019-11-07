@@ -4,7 +4,7 @@ import arrow.core.Option
 import arrow.core.getOrElse
 
 fun createRule(divisor: Int, word: String): Rule = { n: Int ->
-    if (n % divisor == 0)
+    if (n != 0 && n % divisor == 0)
         Option.just(word)
     else
         Option.empty()

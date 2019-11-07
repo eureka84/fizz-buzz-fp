@@ -27,9 +27,11 @@ class FizzBuzzTest {
         assertThat(fizzBuzz(45), equalTo("FizzBuzz"))
     }
 
-
     @Test
     fun `number not divisible by 3 or 5`() {
+        assertThat(fizzBuzz(0), equalTo("0"))
+        assertThat(fizzBuzz(2), equalTo("2"))
         assertThat(fizzBuzz(4), equalTo("4"))
+        assertThat(fizzBuzz(8), equalTo("8"))
     }
 }

@@ -4,7 +4,7 @@ import arrow.core.Option
 import arrow.core.getOrElse
 
 fun word(divisor: Int, word: String): Rule = { n: Int ->
-    if (n!=0 && n % divisor == 0)
+    if (n != 0 && n % divisor == 0)
         Option.just(word)
     else
         Option.empty()
@@ -15,8 +15,11 @@ val buzz: Rule = word(5, "Buzz")
 
 val rules: List<Rule> = listOf(fizz, buzz)
 
-fun createFizzBuzz(rules: List<Rule>): (Int) -> String = { n: Int ->
-    rules.combined()(n).getOrElse { "$n" }
+fun createFizzBuzz(rules: List<Rule>): (Int) -> String {
+    val applyAllRulesTo = rules.combined()
+    return { n: Int ->
+        applyAllRulesTo(n).getOrElse { "$n" }
+    }
 }
 
 val fizzBuzz: (Int) -> String = createFizzBuzz(rules)

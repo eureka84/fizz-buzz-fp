@@ -4,10 +4,11 @@ import arrow.core.Option
 import arrow.core.getOrElse
 
 fun word(divisor: Int, word: String): Rule = { n: Int ->
-    if (n != 0 && n % divisor == 0)
-        Option.just(word)
-    else
-        Option.empty()
+    when {
+        n == 0            -> Option.empty()
+        n % divisor == 0  -> Option.just(word)
+        else              -> Option.empty()
+    }
 }
 
 val fizz: Rule = word(3, "Fizz")
